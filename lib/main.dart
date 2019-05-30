@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Nextflow Google Maps',
       theme: ThemeData(
-      
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Nextflow Google Maps'),
@@ -28,7 +29,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -38,7 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -51,8 +50,21 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
+        onPressed: () async {
+          var location = new Location();
+          try {
+            var currentLocation = await location.getLocation();
+            var newPosition = CameraPosition(
+              target: LatLng(currentLocation["latitude"], currentLocation["longitude"]),
+              zoom: 14.4746,
+            );
+            final GoogleMapController controller = await _controller.future;
+            controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+          } on PlatformException catch (e) {
+            if (e.code == 'PERMISSION_DENIED') {
+              print('Permission denied');
+            }
+          }
         },
         tooltip: 'Increment',
         child: Icon(Icons.location_on),
