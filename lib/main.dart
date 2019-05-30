@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     zoom: 14.4746,
   );
 
-  Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
+          _controller = controller;
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -58,8 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
               target: LatLng(currentLocation.latitude, currentLocation.longitude),
               zoom: 14.4746,
             );
-            final GoogleMapController controller = await _controller.future;
-            controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+
+           
+            _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
           } on PlatformException catch (e) {
             if (e.code == 'PERMISSION_DENIED') {
               print('Permission denied');
