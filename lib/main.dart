@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           try {
             var currentLocation = await location.getLocation();
             var newPosition = CameraPosition(
-              target: LatLng(currentLocation["latitude"], currentLocation["longitude"]),
+              target: LatLng(currentLocation.latitude, currentLocation.longitude),
               zoom: 14.4746,
             );
             final GoogleMapController controller = await _controller.future;
