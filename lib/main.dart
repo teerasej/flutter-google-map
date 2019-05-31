@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   Set<Marker> markerSet = new Set<Marker>();
+  Set<Polyline> polylineSet = new Set<Polyline>();
 
   GoogleMapController _controller;
 
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         mapType: MapType.satellite,
         initialCameraPosition: _kGooglePlex,
         markers: markerSet,
+        polylines: polylineSet,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
         },
@@ -61,15 +63,44 @@ class _MyHomePageState extends State<MyHomePage> {
             var currentLocation = await location.getLocation();
             var newPosition = CameraPosition(
               target: LatLng(currentLocation.latitude, currentLocation.longitude),
-              zoom: 20
+              zoom: 20,
+              tilt: 90.0
             );
 
             // _kGooglePlex = newPosition;
             _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
 
-            // setState(() {
-            //   markerSet.add(Marker(position: LatLng(currentLocation.latitude, currentLocation.longitude), markerId: MarkerId('1')));
-            // });
+            // Plot Marker on device's location
+            var deviceLatLng = LatLng(currentLocation.latitude, currentLocation.longitude);
+            var destinationLatLng = LatLng(12.6960129, 101.2662837);
+
+            var marker = Marker(
+              markerId: MarkerId('1'),
+              position: deviceLatLng
+            );
+
+            // Ploy polyline from device's locatoin to Central Plaza Rayong
+            var line = Polyline(
+              polylineId: PolylineId('line1'),
+              points: [
+                deviceLatLng,
+                destinationLatLng
+              ],
+              color: Colors.yellow,
+              geodesic: true,
+            );
+
+            var markerCentral = Marker(
+              markerId: MarkerId('2'),
+              position: destinationLatLng
+            );
+
+            setState(() {
+              polylineSet.add(line);
+              markerSet.add(marker);
+              markerSet.add(markerCentral)
+            });
+            
 
           } on PlatformException catch (e) {
             if (e.code == 'PERMISSION_DENIED') {
