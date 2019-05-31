@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Nextflow Google Maps',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -29,10 +30,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final CameraPosition _kGooglePlex = CameraPosition(
+
+  CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    zoom: 20,
   );
+
+  Set<Marker> markerSet = new Set<Marker>();
 
   GoogleMapController _controller;
 
@@ -43,8 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: GoogleMap(
-        mapType: MapType.normal,
+        mapType: MapType.satellite,
         initialCameraPosition: _kGooglePlex,
+        markers: markerSet,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
         },
@@ -56,11 +61,16 @@ class _MyHomePageState extends State<MyHomePage> {
             var currentLocation = await location.getLocation();
             var newPosition = CameraPosition(
               target: LatLng(currentLocation.latitude, currentLocation.longitude),
-              zoom: 14.4746,
+              zoom: 20
             );
 
-           
+            // _kGooglePlex = newPosition;
             _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+
+            // setState(() {
+            //   markerSet.add(Marker(position: LatLng(currentLocation.latitude, currentLocation.longitude), markerId: MarkerId('1')));
+            // });
+
           } on PlatformException catch (e) {
             if (e.code == 'PERMISSION_DENIED') {
               print('Permission denied');
