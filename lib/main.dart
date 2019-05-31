@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         initialCameraPosition: _kGooglePlex,
         markers: markerSet,
         polylines: polylineSet,
+        myLocationButtonEnabled: false,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
         },
@@ -98,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               polylineSet.add(line);
               markerSet.add(marker);
-              markerSet.add(markerCentral)
+              markerSet.add(markerCentral);
             });
             
 
