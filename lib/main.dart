@@ -31,9 +31,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 20,
+  CameraPosition _startLocation = CameraPosition(
+    target: LatLng(13.6737608,100.451856),
+    zoom: 17,
   );
 
   Set<Marker> markerSet = new Set<Marker>();
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: GoogleMap(
         mapType: MapType.satellite,
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: _startLocation,
         markers: markerSet,
         polylines: polylineSet,
         myLocationButtonEnabled: false,
