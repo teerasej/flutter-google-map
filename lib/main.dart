@@ -62,8 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
           var location = new Location();
           try {
             var currentLocation = await location.getLocation();
+            
+            var deviceLatLng = LatLng(currentLocation.latitude, currentLocation.longitude);
+
             var newPosition = CameraPosition(
-              target: LatLng(currentLocation.latitude, currentLocation.longitude),
+              target: deviceLatLng,
               zoom: 20,
               tilt: 90.0
             );
@@ -72,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
             _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
 
             // Plot Marker on device's location
-            var deviceLatLng = LatLng(currentLocation.latitude, currentLocation.longitude);
             var destinationLatLng = LatLng(12.6960129, 101.2662837);
 
             var marker = Marker(
