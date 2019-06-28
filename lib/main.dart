@@ -71,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
               tilt: 90.0
             );
 
-            // _kGooglePlex = newPosition;
             _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
 
             // Plot Marker on device's location
